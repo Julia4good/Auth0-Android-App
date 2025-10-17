@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 1️⃣ Internet permission is required for Auth0 web login -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Autentication_App"
+        tools:targetApi="31">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Autentication_App">
+
+            <!-- 2️⃣ Main launcher intent -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!-- 3️⃣ Auth0 redirect callback handler -->
+            <!-- This must exactly match your Auth0 app settings and ViewModel scheme -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- 🔗 Callback URL structure:
+                     demo://dev-k6wz2clanwpqjgyf.us.auth0.com/android/com.example.autentication_app/callback
+                     Must match Auth0 dashboard “Allowed Callback URLs”
+                -->
+                <data
+                    android:scheme="demo"
+                    android:host="dev-k6wz2clanwpqjgyf.us.auth0.com"
+                    android:pathPrefix="/android/com.example.autentication_app/callback" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
