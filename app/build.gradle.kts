@@ -1,5 +1,13 @@
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
+//val org.gradle.accessors.dm.LibrariesForLibs.AndroidxLifecycleLibraryAccessors.viewmodel: kotlin.Any
+
+
+
+//val org.gradle.accessors.dm.LibrariesForLibs.AndroidxLifecycleLibraryAccessors.viewmodel: kotlin.Any
+
+
+
 // Refactored to use Kotlin DSL and Version Catalogs as requested.
 
 plugins {
@@ -73,14 +81,13 @@ android {
     }
 }
 
+
 dependencies {
     // --- Auth0 Dependencies ---
     implementation(libs.auth0.android)
-    
     // ✅ FIX: Explicitly adding the required java-jwt library.
     // This resolves the Unresolved Reference errors (JWT, DecodedJWT, JWTDecodeException).
-    implementation("com.auth0:java-jwt:4.4.0") 
-    // implementation(libs.auth0.jwtdecode) // Commented out to prevent conflict/redundancy with the explicit implementation
+    implementation(libs.java.jwt)
     
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
@@ -89,9 +96,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
     
-    // ✅ FIX: Added dependency to resolve the Unresolved reference 'viewModel'
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
-    
+    // ✅ FIX: Corrected and de-duplicated lifecycle dependencies. Each on its own line.
+    implementation(libs.androidx.lifecycle.viewmodel.compose) // For viewModel() in Compose
+    implementation(libs.androidx.lifecycle.livedata.ktx)      // For LiveData support
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.0")
+    // Compose Bill of Materials (BOM)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
@@ -106,9 +115,4 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-
-    // --- ❌ REMOVE THE INCORRECT JWT Dependencies ---
-    // implementation("io.jsonwebtoken:jjwt-api:0.13.0")      <-- DELETE
-    // runtimeOnly("io.jsonwebtoken:jjwt-impl:0.13.0")        <-- DELETE
-    // runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.13.0")     <-- DELETE
 }
